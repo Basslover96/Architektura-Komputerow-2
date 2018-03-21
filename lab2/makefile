@@ -1,4 +1,4 @@
-all: add sub mul
+all: add sub
 
 add: add.o
 	ld -o add add.o
@@ -11,9 +11,3 @@ sub: sub.o
 
 sub.o: sub.s
 	as -g -o sub.o sub.s
-
-mul: mul.o
-	ld -o mul mul.o
-
-mul.o: mul.s
-	as -g -o mul.o mul.s
