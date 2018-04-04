@@ -3,7 +3,6 @@
 #include <time.h>
 
 clock_t startTime, stopTime;
-float finalTime;
 
 //Struktura do przechowywania liczb dla SIMD
 typedef struct myVector{
@@ -35,11 +34,12 @@ myVector createVector(int a, int  b, int c, int d){
 //Działania dla SIMD
 
 //Dodawanie SIMD
-float AddSIMD (int amountOfNumbers){
+double AddSIMD (int amountOfNumbers){
     myVector addResult;
     myVector a;
     myVector b;
     myVector table[amountOfNumbers];
+    double time = 0;
 
     randVectorTable(table,amountOfNumbers);
 
@@ -60,11 +60,13 @@ float AddSIMD (int amountOfNumbers){
             );
             
             stopTime = clock();
-            finalTime += ((stopTime - startTime)/CLOCKS_PER_SEC);
+            time += (double)(stopTime - startTime);
         }
     }
     
-    return finalTime/10;
+    time/=CLOCKS_PER_SEC;
+
+    return time/10;
 }
 
 //Odejmowanie SIMD
@@ -73,6 +75,7 @@ float SubSIMD (int amountOfNumbers){
     myVector a;
     myVector b;
     myVector table[amountOfNumbers];
+    float time = 0;
 
     randVectorTable(table,amountOfNumbers);
 
@@ -93,11 +96,13 @@ float SubSIMD (int amountOfNumbers){
             );
 
             stopTime = clock();
-            finalTime += ((stopTime - startTime)/CLOCKS_PER_SEC);
+            time += (stopTime - startTime);
         }
     }
     
-    return finalTime/10;
+    time/=CLOCKS_PER_SEC;
+
+    return time/10;
 }
 
 //Mnożenie SIMD
@@ -106,6 +111,7 @@ float MulSIMD (int amountOfNumbers){
     myVector a;
     myVector b;
     myVector table[amountOfNumbers];
+    float time = 0;
 
     randVectorTable(table,amountOfNumbers);
 
@@ -126,11 +132,13 @@ float MulSIMD (int amountOfNumbers){
             );
 
             stopTime = clock();
-            finalTime += ((stopTime - startTime)/CLOCKS_PER_SEC);
+            time += (stopTime - startTime);
         }
     }
     
-    return finalTime/10;
+    time/=CLOCKS_PER_SEC;
+
+    return time/10;
 }
 
 //Dzielenie SIMD
@@ -139,6 +147,7 @@ float DivSIMD (int amountOfNumbers){
     myVector a;
     myVector b;
     myVector table[amountOfNumbers];
+    float time = 0;
 
     randVectorTable(table,amountOfNumbers);
 
@@ -159,11 +168,13 @@ float DivSIMD (int amountOfNumbers){
             );
 
             stopTime = clock();
-            finalTime += ((stopTime - startTime)/CLOCKS_PER_SEC);
+            time += (stopTime - startTime);
         }
     }
     
-    return finalTime/10;
+    time/=CLOCKS_PER_SEC;
+
+    return time/10;
 }
 
 //Działania dla SISD
@@ -173,6 +184,7 @@ float AddSISD(int amountOfNumbers){
     myVector a;
     myVector b;
     myVector table[amountOfNumbers];
+    float time = 0;
 
     randVectorTable(table,amountOfNumbers);
 
@@ -220,11 +232,13 @@ float AddSISD(int amountOfNumbers){
             );
 
             stopTime = clock();
-            finalTime += ((stopTime - startTime)/CLOCKS_PER_SEC);
+            time += (stopTime - startTime);
         }
     }
     
-    return finalTime/10;
+    time/=CLOCKS_PER_SEC;
+
+    return time/10;
 }
 
 float SubSISD(int amountOfNumbers){
@@ -232,6 +246,7 @@ float SubSISD(int amountOfNumbers){
     myVector a;
     myVector b;
     myVector table[amountOfNumbers];
+    float time = 0;
 
     randVectorTable(table,amountOfNumbers);
 
@@ -279,11 +294,13 @@ float SubSISD(int amountOfNumbers){
             );
 
             stopTime = clock();
-            finalTime += ((stopTime - startTime)/CLOCKS_PER_SEC);
+            time += (stopTime - startTime);
         }
     }
     
-    return finalTime/10;
+    time/=CLOCKS_PER_SEC;
+
+    return time/10;
 }
 
 float MulSISD(int amountOfNumbers){
@@ -291,6 +308,7 @@ float MulSISD(int amountOfNumbers){
     myVector a;
     myVector b;
     myVector table[amountOfNumbers];
+    float time = 0;
 
     randVectorTable(table,amountOfNumbers);
 
@@ -338,11 +356,13 @@ float MulSISD(int amountOfNumbers){
             );
 
             stopTime = clock();
-            finalTime += ((stopTime - startTime)/CLOCKS_PER_SEC);
+            time += (stopTime - startTime);
         }
     }
     
-    return finalTime/10;
+    time/=CLOCKS_PER_SEC;
+
+    return time/10;
 }
 
 float DivSISD(int amountOfNumbers){
@@ -350,6 +370,7 @@ float DivSISD(int amountOfNumbers){
     myVector a;
     myVector b;
     myVector table[amountOfNumbers];
+    float time = 0;
 
     randVectorTable(table,amountOfNumbers);
 
@@ -401,11 +422,13 @@ float DivSISD(int amountOfNumbers){
             );
 
             stopTime = clock();
-            finalTime += ((stopTime - startTime)/CLOCKS_PER_SEC);
+            time += (stopTime - startTime);
         }
     }
     
-    return finalTime/10;
+    time/=CLOCKS_PER_SEC;
+
+    return time/10;
 }
 
 int main(){
@@ -413,7 +436,6 @@ int main(){
     srand(time(NULL));
 
     FILE * file;
-    float timeAdd, timeSub, timeMul, timeDiv;
 
     file=fopen("wyniki.txt","w");
 

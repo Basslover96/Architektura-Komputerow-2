@@ -1,7 +1,7 @@
 Typ obliczen: SIMD
 Liczba liczb: 2048
 Sredni czas [s]:
-+  0.000000
++  0.000323
 -  0.000000
 *  0.000000
 /  0.000000
@@ -9,7 +9,7 @@ Sredni czas [s]:
 Typ obliczen: SIMD
 Liczba liczb: 4096
 Sredni czas [s]:
-+  0.000000
++  0.000657
 -  0.000000
 *  0.000000
 /  0.000000
@@ -17,7 +17,7 @@ Sredni czas [s]:
 Typ obliczen: SIMD
 Liczba liczb: 8192
 Sredni czas [s]:
-+  0.000000
++  0.001259
 -  0.000000
 *  0.000000
 /  0.000000
