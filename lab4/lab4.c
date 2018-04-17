@@ -22,7 +22,7 @@ void randVectorTable(myVector * table, int size){
     }
 }
 
-myVector createVector(int a, int  b, int c, int d){
+myVector createVector(float a, float  b, float c, float d){
     myVector toReturn;
     toReturn.a=a;
     toReturn.b=b;
