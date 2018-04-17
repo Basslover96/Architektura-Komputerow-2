@@ -6,10 +6,10 @@ clock_t startTime, stopTime;
 
 //Struktura do przechowywania liczb dla SIMD
 typedef struct myVector{
-    int a;
-    int b;
-    int c;
-    int d;
+    float  a;
+    float  b;
+    float  c;
+    float  d;
 }myVector;
 
 //Generacja tablicy wektorów
@@ -58,13 +58,14 @@ double AddSIMD (int amountOfNumbers){
                 :"=g"(addResult)
                 :"g"(a), "g"(b)
             );
-            
+           
+		printf("%f",a.a);
+		printf
+
             stopTime = clock();
-            time += (double)(stopTime - startTime);
+            time += (double)(stopTime - startTime)/CLOCKS_PER_SEC;
         }
     }
-    
-    time/=CLOCKS_PER_SEC;
 
     return time/10;
 }
