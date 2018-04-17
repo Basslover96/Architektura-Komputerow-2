@@ -34,17 +34,14 @@ myVector createVector(int a, int  b, int c, int d){
 //Działania dla SIMD
 
 //Dodawanie SIMD
-double AddSIMD (int amountOfNumbers){
+double AddSIMD (myVector table[], int amountOfNumbers){
     myVector addResult;
     myVector a;
     myVector b;
-    myVector table[amountOfNumbers];
     double time = 0;
 
-    randVectorTable(table,amountOfNumbers);
-
     for(int i = 0; i<10; i++){
-        for(int j = 0; j<amountOfNumbers/4;j++){
+        for(int j = 0; j<amountOfNumbers;j++){
             a = createVector(table[j].a,table[j].b,table[j].c,table[j].d);
             b = createVector(table[j].a,table[j].b,table[j].c,table[j].d);
 
@@ -58,30 +55,24 @@ double AddSIMD (int amountOfNumbers){
                 :"=g"(addResult)
                 :"g"(a), "g"(b)
             );
-           
-		printf("%f",a.a);
-		printf
 
             stopTime = clock();
-            time += (double)(stopTime - startTime)/CLOCKS_PER_SEC;
+            time += (double)(stopTime - startTime);
         }
     }
 
-    return time/10;
+    return ((time/CLOCKS_PER_SEC)/10);
 }
 
 //Odejmowanie SIMD
-float SubSIMD (int amountOfNumbers){
+float SubSIMD (myVector table[], int amountOfNumbers){
     myVector subResult;
     myVector a;
     myVector b;
-    myVector table[amountOfNumbers];
-    float time = 0;
-
-    randVectorTable(table,amountOfNumbers);
+    double time = 0;
 
     for(int i = 0; i<10; i++){
-        for(int j = 0; j<amountOfNumbers/4;j++){
+        for(int j = 0; j<amountOfNumbers;j++){
             a = createVector(table[j].a,table[j].b,table[j].c,table[j].d);
             b = createVector(table[j].a,table[j].b,table[j].c,table[j].d);
 
@@ -97,27 +88,22 @@ float SubSIMD (int amountOfNumbers){
             );
 
             stopTime = clock();
-            time += (stopTime - startTime);
+            time += (double)(stopTime - startTime);
         }
     }
-    
-    time/=CLOCKS_PER_SEC;
 
-    return time/10;
+    return (time/CLOCKS_PER_SEC)/10;
 }
 
 //Mnożenie SIMD
-float MulSIMD (int amountOfNumbers){
+float MulSIMD (myVector table[], int amountOfNumbers){
     myVector mulResult;
     myVector a;
     myVector b;
-    myVector table[amountOfNumbers];
-    float time = 0;
-
-    randVectorTable(table,amountOfNumbers);
+    double time = 0;
 
     for(int i = 0; i<10; i++){
-        for(int j = 0; j<amountOfNumbers/4;j++){
+        for(int j = 0; j<amountOfNumbers;j++){
             a = createVector(table[j].a,table[j].b,table[j].c,table[j].d);
             b = createVector(table[j].a,table[j].b,table[j].c,table[j].d);
 
@@ -133,27 +119,22 @@ float MulSIMD (int amountOfNumbers){
             );
 
             stopTime = clock();
-            time += (stopTime - startTime);
+            time += (double)(stopTime - startTime);
         }
     }
-    
-    time/=CLOCKS_PER_SEC;
 
-    return time/10;
+    return (time/CLOCKS_PER_SEC)/10;
 }
 
 //Dzielenie SIMD
-float DivSIMD (int amountOfNumbers){
+float DivSIMD (myVector table[], int amountOfNumbers){
     myVector divResult;
     myVector a;
     myVector b;
-    myVector table[amountOfNumbers];
-    float time = 0;
-
-    randVectorTable(table,amountOfNumbers);
+    double time = 0;
 
     for(int i = 0; i<10; i++){
-        for(int j = 0; j<amountOfNumbers/4;j++){
+        for(int j = 0; j<amountOfNumbers;j++){
             a = createVector(table[j].a,table[j].b,table[j].c,table[j].d);
             b = createVector(table[j].a,table[j].b,table[j].c,table[j].d);
 
@@ -169,25 +150,20 @@ float DivSIMD (int amountOfNumbers){
             );
 
             stopTime = clock();
-            time += (stopTime - startTime);
+            time += (double)(stopTime - startTime);
         }
     }
-    
-    time/=CLOCKS_PER_SEC;
 
-    return time/10;
+    return (time/CLOCKS_PER_SEC)/10;
 }
 
 //Działania dla SISD
 
-float AddSISD(int amountOfNumbers){
+float AddSISD(myVector table[], int amountOfNumbers){
     myVector addResult;
     myVector a;
     myVector b;
-    myVector table[amountOfNumbers];
-    float time = 0;
-
-    randVectorTable(table,amountOfNumbers);
+    double time = 0;
 
     for(int i = 0; i<10; i++){
         for(int j = 0; j<amountOfNumbers;j++){
@@ -197,59 +173,58 @@ float AddSISD(int amountOfNumbers){
             startTime = clock();
 
             __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "add %%eax, %%ebx\n"
-                "mov %%ebx, %0\n"
-                :"=g"(addResult.a)
-                :"g"(a.a), "g"(b.a)
+                "fld %1\n"
+                "fadd %2\n"
+                :"=t"(addResult.a)
+                :"m"(a.a), "m"(b.a)
             );
             
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+            
             __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "add %%eax, %%ebx\n"
-                "mov %%ebx, %0\n"
-                :"=g"(addResult.b)
-                :"g"(a.b), "g"(b.b)
-            );
-
-            __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "add %%eax, %%ebx\n"
-                "mov %%ebx, %0\n"
-                :"=g"(addResult.c)
-                :"g"(a.c), "g"(b.c)
-            );
-
-            __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "add %%eax, %%ebx\n"
-                "mov %%ebx, %0\n"
-                :"=g"(addResult.d)
-                :"g"(a.d), "g"(b.d)
+                "fld %1\n"
+                "fadd %2\n"
+                :"=t"(addResult.b)
+                :"m"(a.b), "m"(b.b)
             );
 
             stopTime = clock();
-            time += (stopTime - startTime);
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
+            __asm__(
+                "fld %1\n"
+                "fadd %2\n"
+                :"=t"(addResult.c)
+                :"m"(a.c), "m"(b.c)
+            );
+
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
+            __asm__(
+                "fld %1\n"
+                "fadd %2\n"
+                :"=t"(addResult.d)
+                :"m"(a.d), "m"(b.d)
+            );
+
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
         }
     }
-    
-    time/=CLOCKS_PER_SEC;
-
-    return time/10;
+ 
+    return (time/CLOCKS_PER_SEC)/10;
 }
 
-float SubSISD(int amountOfNumbers){
+float SubSISD(myVector table[], int amountOfNumbers){
     myVector subResult;
     myVector a;
     myVector b;
-    myVector table[amountOfNumbers];
-    float time = 0;
-
-    randVectorTable(table,amountOfNumbers);
+    double time = 0;
 
     for(int i = 0; i<10; i++){
         for(int j = 0; j<amountOfNumbers;j++){
@@ -259,59 +234,58 @@ float SubSISD(int amountOfNumbers){
             startTime = clock();
 
             __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "sub %%eax, %%ebx\n"
-                "mov %%ebx, %0\n"
-                :"=g"(subResult.a)
-                :"g"(a.a), "g"(b.a)
+                "fld %1\n"
+                "fsub %2\n"
+                :"=t"(subResult.a)
+                :"m"(a.a), "m"(b.a)
             );
             
-            __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "sub %%eax, %%ebx\n"
-                "mov %%ebx, %0\n"
-                :"=g"(subResult.b)
-                :"g"(a.b), "g"(b.b)
-            );
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
+            startTime = clock();
 
             __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "sub %%eax, %%ebx\n"
-                "mov %%ebx, %0\n"
-                :"=g"(subResult.c)
-                :"g"(a.c), "g"(b.c)
-            );
-
-            __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "sub %%eax, %%ebx\n"
-                "mov %%ebx, %0\n"
-                :"=g"(subResult.d)
-                :"g"(a.d), "g"(b.d)
+                "fld %1\n"
+                "fsub %2\n"
+                :"=t"(subResult.b)
+                :"m"(a.b), "m"(b.b)
             );
 
             stopTime = clock();
-            time += (stopTime - startTime);
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
+            __asm__(
+                "fld %1\n"
+                "fsub %2\n"
+                :"=t"(subResult.c)
+                :"m"(a.c), "m"(b.c)
+            );
+
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
+            __asm__(
+                "fld %1\n"
+                "fsub %2\n"
+                :"=t"(subResult.d)
+                :"m"(a.d), "m"(b.d)
+            );
+
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
         }
     }
-    
-    time/=CLOCKS_PER_SEC;
 
-    return time/10;
+    return (time/CLOCKS_PER_SEC)/10;
 }
 
-float MulSISD(int amountOfNumbers){
+float MulSISD(myVector table[], int amountOfNumbers){
     myVector mulResult;
     myVector a;
     myVector b;
-    myVector table[amountOfNumbers];
-    float time = 0;
-
-    randVectorTable(table,amountOfNumbers);
+    double time = 0;
 
     for(int i = 0; i<10; i++){
         for(int j = 0; j<amountOfNumbers;j++){
@@ -321,59 +295,58 @@ float MulSISD(int amountOfNumbers){
             startTime = clock();
 
             __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "mul %%ebx\n"
-                "mov %%eax, %0\n"
-                :"=g"(mulResult.a)
-                :"g"(a.a), "g"(b.a)
+                "fld %1\n"
+                "fmul %2\n"
+                :"=t"(mulResult.a)
+                :"m"(a.a), "m"(b.a)
             );
             
-            __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "mul %%ebx\n"
-                "mov %%eax, %0\n"
-                :"=g"(mulResult.b)
-                :"g"(a.b), "g"(b.b)
-            );
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
+            startTime = clock();
 
             __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "mul %%ebx\n"
-                "mov %%eax, %0\n"
-                :"=g"(mulResult.c)
-                :"g"(a.c), "g"(b.c)
-            );
-
-            __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "mul %%ebx\n"
-                "mov %%eax, %0\n"
-                :"=g"(mulResult.d)
-                :"g"(a.d), "g"(b.d)
+                "fld %1\n"
+                "fmul %2\n"
+                :"=t"(mulResult.b)
+                :"m"(a.b), "m"(b.b)
             );
 
             stopTime = clock();
-            time += (stopTime - startTime);
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
+            __asm__(
+                "fld %1\n"
+                "fmul %2\n"
+                :"=t"(mulResult.c)
+                :"m"(a.c), "m"(b.c)
+            );
+
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
+            __asm__(
+                "fld %1\n"
+                "fmul %2\n"
+                :"=t"(mulResult.d)
+                :"m"(a.d), "m"(b.d)
+            );
+
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
         }
     }
-    
-    time/=CLOCKS_PER_SEC;
 
-    return time/10;
+    return (time/CLOCKS_PER_SEC)/10;
 }
 
-float DivSISD(int amountOfNumbers){
+float DivSISD(myVector table[], int amountOfNumbers){
     myVector divResult;
     myVector a;
     myVector b;
-    myVector table[amountOfNumbers];
-    float time = 0;
-
-    randVectorTable(table,amountOfNumbers);
+    double time = 0;
 
     for(int i = 0; i<10; i++){
         for(int j = 0; j<amountOfNumbers;j++){
@@ -383,111 +356,111 @@ float DivSISD(int amountOfNumbers){
             startTime = clock();
 
             __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "xor %%edx, %%edx\n"
-                "div %%ebx\n"
-                "mov %%eax, %0\n"
-                :"=g"(divResult.a)
-                :"g"(a.a), "g"(b.a)
+                "fld %1\n"
+                "fdiv %2\n"
+                :"=t"(divResult.a)
+                :"m"(a.a), "m"(b.a)
             );
             
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
              __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "xor %%edx, %%edx\n"
-                "div %%ebx\n"
-                "mov %%eax, %0\n"
-                :"=g"(divResult.b)
-                :"g"(a.b), "g"(b.b)
-            );
-
-            __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "xor %%edx, %%edx\n"
-                "div %%ebx\n"
-                "mov %%eax, %0\n"
-                :"=g"(divResult.c)
-                :"g"(a.c), "g"(b.c)
-            );
-
-            __asm__(
-                "mov %1, %%eax\n"
-                "mov %2, %%ebx\n"
-                "xor %%edx, %%edx\n"
-                "div %%ebx\n"
-                "mov %%eax, %0\n"
-                :"=g"(divResult.d)
-                :"g"(a.d), "g"(b.d)
+                "fld %1\n"
+                "fdiv %2\n"
+                :"=t"(divResult.b)
+                :"m"(a.b), "m"(b.b)
             );
 
             stopTime = clock();
-            time += (stopTime - startTime);
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
+            __asm__(
+                "fld %1\n"
+                "fdiv %2\n"
+                :"=t"(divResult.c)
+                :"m"(a.c), "m"(b.c)
+            );
+
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
+            startTime = clock();
+
+            __asm__(
+                "fld %1\n"
+                "fdiv %2\n"
+                :"=t"(divResult.d)
+                :"m"(a.d), "m"(b.d)
+            );
+
+            stopTime = clock();
+            time += (double)(stopTime - startTime);
         }
     }
-    
-    time/=CLOCKS_PER_SEC;
 
-    return time/10;
+    return (time/CLOCKS_PER_SEC)/10;
 }
 
 int main(){
 
     srand(time(NULL));
 
-    FILE * file;
+    myVector myVectorTable[8192];
+    randVectorTable(myVectorTable, 8192);
 
+    FILE * file;
     file=fopen("wyniki.txt","w");
 
     fprintf(file,"Typ obliczen: SIMD\n");
     fprintf(file,"Liczba liczb: 2048\n");
     fprintf(file,"Sredni czas [s]:\n");
-    fprintf(file,"%s %f","+ ",AddSIMD(2048));
-    fprintf(file,"%s %f","\n- ",SubSIMD(2048));
-    fprintf(file,"%s %f","\n* ",MulSIMD(2048));
-    fprintf(file,"%s %f","\n/ ",DivSIMD(2048));
-
+    fprintf(file,"%s %f","+ ",AddSIMD(myVectorTable,2048));
+    fprintf(file,"%s %f","\n- ",SubSIMD(myVectorTable,2048));
+    fprintf(file,"%s %f","\n* ",MulSIMD(myVectorTable,2048));
+    fprintf(file,"%s %f","\n/ ",DivSIMD(myVectorTable,2048));
+    
     fprintf(file,"\n\nTyp obliczen: SIMD\n");
     fprintf(file,"Liczba liczb: 4096\n");
     fprintf(file,"Sredni czas [s]:\n");
-    fprintf(file,"%s %f","+ ",AddSIMD(4096));
-    fprintf(file,"%s %f","\n- ",SubSIMD(4096));
-    fprintf(file,"%s %f","\n* ",MulSIMD(4096));
-    fprintf(file,"%s %f","\n/ ",DivSIMD(4096));
+    fprintf(file,"%s %f","+ ",AddSIMD(myVectorTable,4096));
+    fprintf(file,"%s %f","\n- ",SubSIMD(myVectorTable,4096));
+    fprintf(file,"%s %f","\n* ",MulSIMD(myVectorTable,4096));
+    fprintf(file,"%s %f","\n/ ",DivSIMD(myVectorTable,4096));
 
     fprintf(file,"\n\nTyp obliczen: SIMD\n");
     fprintf(file,"Liczba liczb: 8192\n");
     fprintf(file,"Sredni czas [s]:\n");
-    fprintf(file,"%s %f","+ ",AddSIMD(8192));
-    fprintf(file,"%s %f","\n- ",SubSIMD(8192));
-    fprintf(file,"%s %f","\n* ",MulSIMD(8192));
-    fprintf(file,"%s %f","\n/ ",DivSIMD(8192));
+    fprintf(file,"%s %f","+ ",AddSIMD(myVectorTable,8192));
+    fprintf(file,"%s %f","\n- ",SubSIMD(myVectorTable,8192));
+    fprintf(file,"%s %f","\n* ",MulSIMD(myVectorTable,8192));
+    fprintf(file,"%s %f","\n/ ",DivSIMD(myVectorTable,8192));
 
     fprintf(file,"\n\nTyp obliczen: SISD\n");
     fprintf(file,"Liczba liczb: 2048\n");
     fprintf(file,"Sredni czas [s]:\n");
-    fprintf(file,"%s %f","+ ",AddSISD(2048));
-    fprintf(file,"%s %f","\n- ",SubSISD(2048));
-    fprintf(file,"%s %f","\n* ",MulSISD(2048));
-    fprintf(file,"%s %f","\n/ ",DivSISD(2048));
+    fprintf(file,"%s %f","+ ",AddSISD(myVectorTable,2048));
+    fprintf(file,"%s %f","\n- ",SubSISD(myVectorTable,2048));
+    fprintf(file,"%s %f","\n* ",MulSISD(myVectorTable,2048));
+    fprintf(file,"%s %f","\n/ ",DivSISD(myVectorTable,2048));
 
     fprintf(file,"\n\nTyp obliczen: SISD\n");
     fprintf(file,"Liczba liczb: 4096\n");
     fprintf(file,"Sredni czas [s]:\n");
-    fprintf(file,"%s %f","+ ",AddSISD(4096));
-    fprintf(file,"%s %f","\n- ",SubSISD(4096));
-    fprintf(file,"%s %f","\n* ",MulSISD(4096));
-    fprintf(file,"%s %f","\n/ ",DivSISD(4096));
+    fprintf(file,"%s %f","+ ",AddSISD(myVectorTable,4096));
+    fprintf(file,"%s %f","\n- ",SubSISD(myVectorTable,4096));
+    fprintf(file,"%s %f","\n* ",MulSISD(myVectorTable,4096));
+    fprintf(file,"%s %f","\n/ ",DivSISD(myVectorTable,4096));
 
     fprintf(file,"\n\nTyp obliczen: SISD\n");
     fprintf(file,"Liczba liczb: 8192\n");
     fprintf(file,"Sredni czas [s]:\n");
-    fprintf(file,"%s %f","+ ",AddSISD(8192));
-    fprintf(file,"%s %f","\n- ",SubSISD(8192));
-    fprintf(file,"%s %f","\n* ",MulSISD(8192));
-    fprintf(file,"%s %f","\n/ ",DivSISD(8192));
-    
+    fprintf(file,"%s %f","+ ",AddSISD(myVectorTable,8192));
+    fprintf(file,"%s %f","\n- ",SubSISD(myVectorTable,8192));
+    fprintf(file,"%s %f","\n* ",MulSISD(myVectorTable,8192));
+    fprintf(file,"%s %f","\n/ ",DivSISD(myVectorTable,8192));
+
     fclose(file);
 
     return 0;
